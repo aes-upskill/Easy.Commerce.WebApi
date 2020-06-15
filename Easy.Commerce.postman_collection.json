@@ -1,0 +1,316 @@
+{
+	"info": {
+		"_postman_id": "4f26f31b-4199-4a1c-b097-3817ebc01b3c",
+		"name": "Easy.Commerce",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Product",
+			"item": [
+				{
+					"name": "Get Products",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:{{API_PORT_NUMBER}}/api/product",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{API_PORT_NUMBER}}",
+							"path": [
+								"api",
+								"product"
+							]
+						},
+						"description": "Get All the Products"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{CUSTOMER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:{{API_PORT_NUMBER}}/api/product/68",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{API_PORT_NUMBER}}",
+							"path": [
+								"api",
+								"product",
+								"68"
+							]
+						},
+						"description": "Edit Product"
+					},
+					"response": []
+				},
+				{
+					"name": "Add New Product",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ADMIN_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=utf-8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"productID\": 0,\r\n    \"code\": \"CODE007\",\r\n    \"name\": \"Windows\",\r\n    \"categoryID\": 1,\r\n    \"category\": null,\r\n    \"modifiedDate\": \"2020-06-09T17:21:52.97\",\r\n    \"createdDate\": \"2020-06-09T17:21:52.97\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:{{API_PORT_NUMBER}}/api/product",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{API_PORT_NUMBER}}",
+							"path": [
+								"api",
+								"product"
+							]
+						},
+						"description": "Add New Product"
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ADMIN_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json; charset=utf-8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"productID\": 68,\r\n    \"code\": \"CODE001\",\r\n    \"name\": \"Windows 95\",\r\n    \"categoryID\": 1,\r\n    \"category\": null,\r\n    \"modifiedDate\": \"2020-06-09T17:21:52.97\",\r\n    \"createdDate\": \"2020-06-09T17:21:52.97\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:{{API_PORT_NUMBER}}/api/product/68",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{API_PORT_NUMBER}}",
+							"path": [
+								"api",
+								"product",
+								"68"
+							]
+						},
+						"description": "Edit Product"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Product",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ADMIN_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json;charset=utf-8"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:{{API_PORT_NUMBER}}/api/product/68",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{API_PORT_NUMBER}}",
+							"path": [
+								"api",
+								"product",
+								"68"
+							]
+						},
+						"description": "Add New Product"
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "GetAdmin Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5eea9f24-0f79-4878-838f-bb8994c1e356",
+								"exec": [
+									"var tokenData = JSON.parse(responseBody);\r",
+									"postman.setEnvironmentVariable(\"ADMIN_TOKEN\", tokenData);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "userID",
+									"value": "admin",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "q",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:{{API_PORT_NUMBER}}/api/token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{API_PORT_NUMBER}}",
+							"path": [
+								"api",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Customer Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "514c45fe-e243-4be0-bf8c-c52a1af86d64",
+								"exec": [
+									"var tokenData = JSON.parse(responseBody);\r",
+									"postman.setEnvironmentVariable(\"CUSTOMER_TOKEN\", tokenData);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "userID",
+									"value": "customer",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "q",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:{{API_PORT_NUMBER}}/api/token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "{{API_PORT_NUMBER}}",
+							"path": [
+								"api",
+								"token"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

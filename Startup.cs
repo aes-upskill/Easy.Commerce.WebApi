@@ -1,5 +1,7 @@
 using Easy.Commerce.WebApi.Data;
+using Easy.Commerce.WebApi.Security;
 using Easy.Commerce.WebApi.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -9,7 +11,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -56,7 +57,11 @@ namespace Easy.Commerce.WebApi
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
                 };
             });
-
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(Policies.Admin, Policies.AdminPolicy());
+                options.AddPolicy(Policies.Customer, Policies.CustomerPolicy());
+            });
             services.AddSingleton(typeof(ILogger<>), typeof(Logger<>));
             var logFactory = LoggerFactory.Create(b => b.AddConsole().AddDebug());
 

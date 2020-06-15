@@ -1,4 +1,5 @@
 ﻿using Easy.Commerce.WebApi.Models;
+using Easy.Commerce.WebApi.Security;
 using Easy.Commerce.WebApi.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,6 +18,7 @@ namespace Easy.Commerce.WebApi.Controllers
             this.productService = productService;
         }
         
+        [AllowAnonymous]
         public ActionResult Get()
         {
             return Ok(productService.Get());
@@ -24,6 +26,7 @@ namespace Easy.Commerce.WebApi.Controllers
 
         
         [HttpGet("{id}.{format?}", Name = "Get")]
+        [Authorize(Policy = Policies.Customer)]
         public ActionResult Get(int id)
         {
             var product = this.productService.GetById(id);
@@ -36,6 +39,7 @@ namespace Easy.Commerce.WebApi.Controllers
 
         
         [HttpPost]
+        [Authorize(Policy = Policies.Admin)]
         public ActionResult Post([FromBody] Product value)
         {
             var product = productService.Save(value);
@@ -44,6 +48,7 @@ namespace Easy.Commerce.WebApi.Controllers
 
         
         [HttpPut("{id}")]
+        [Authorize(Policy = Policies.Admin)]
         public ActionResult Put(int id, [FromBody] Product value)
         {
             if (id != value.ProductID)
@@ -56,6 +61,7 @@ namespace Easy.Commerce.WebApi.Controllers
 
         
         [HttpDelete("{id}")]
+        [Authorize(Policy = Policies.Admin)]
         public ActionResult Delete(int id)
         {
             if (!productService.Exist(id))

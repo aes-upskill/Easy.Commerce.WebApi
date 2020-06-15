@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 
@@ -14,10 +16,15 @@ namespace Easy.Commerce.WebApi.Controllers
     public class TokenController : ControllerBase
     {
         private readonly IConfiguration configuration;
-
+        private readonly List<User> userList;
         public TokenController(IConfiguration config)
         {
             configuration = config;
+            userList = new List<User>()
+            {
+                new User { UserName = "admin", FirstName = "Admin", LastName = "Role", Email = "admin@domain.com", UserRole="Admin" },
+                new User { UserName = "customer", FirstName = "Customer", LastName = "Role", Email = "customer@domain.com", UserRole="Customer" }
+            };
         }
 
         [HttpPost]
@@ -25,18 +32,20 @@ namespace Easy.Commerce.WebApi.Controllers
         {
             if (!(string.IsNullOrWhiteSpace(userID) && string.IsNullOrWhiteSpace(password)))
             {
-                if (userID?.ToLowerInvariant() == "ngarje@agility.com" && password?.ToLowerInvariant() == "q")
+                var user = userList.SingleOrDefault(x => x.UserName.ToLowerInvariant() == userID?.ToLowerInvariant() && password?.ToLowerInvariant() == "q");
+                if (user != null)
                 {
-                    var user = new User { UserName = "ngarje", FirstName = "Nilesh", LastName = "Garje", Email = "someone@domain.com" };
+
                     var claims = new[] {
                     new Claim(JwtRegisteredClaimNames.Sub, configuration["Jwt:Subject"]),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                     new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-                    new Claim("Id", user.UserID.ToString()),
-                    new Claim("FirstName", user.FirstName),
-                    new Claim("LastName", user.LastName),
-                    new Claim("UserName", user.UserName),
-                    new Claim("Email", user.Email)
+                    new Claim("id", user.UserID.ToString()),
+                    new Claim("firstName", user.FirstName),
+                    new Claim("lastName", user.LastName),
+                    new Claim("userName", user.UserName),
+                    new Claim("email", user.Email),
+                    new Claim("role", user.UserRole)
                 };
                     var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]));
                     var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
